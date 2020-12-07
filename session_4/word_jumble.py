@@ -1,6 +1,7 @@
 from random import shuffle
+from getpass import getpass
 
-string = 'PYTHON'
+string = getpass('Quiz')
 string = list(string)
 shuffle(string)
 print(string)
