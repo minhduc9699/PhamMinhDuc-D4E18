@@ -82,3 +82,17 @@ data = {
         },
     ]
 }
+
+movie_list = data['results']
+
+for i in range(len(movie_list)):
+    print(movie_list[i]['title'])
+print('______________')
+for i in range(len(movie_list)):
+    if movie_list[i]['vote_average'] > 7:
+        print(movie_list[i]['title'])
+print('______________')
+total_vote = 0
+for i in range(len(movie_list)):
+    total_vote += movie_list[i]['vote_count']
+print(total_vote)
