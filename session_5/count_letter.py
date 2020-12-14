@@ -16,4 +16,3 @@ result = count_letter(list_string)
 
 for key in result:
     print(f'{key} appears {result[key]}')
-
