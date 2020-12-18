@@ -6,6 +6,7 @@ response = get('https://dantri.com.vn/')
 print(response.headers)
 file = open('dantri.html', 'w', encoding='utf-8')
 file.write(response.text)
+
 # load html to bs4
 content_html = BeautifulSoup(response.text)
 # find ul tag that contain data
