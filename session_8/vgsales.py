@@ -19,6 +19,9 @@
 #     ]
 # }
 import pymysql
+import pyexcel
+
+vg_data = pyexcel.get_records(file_name='vgsales.csv')
 
 client = pymysql.connect(
     host='localhost',
@@ -30,36 +33,55 @@ client = pymysql.connect(
 
 board = client.cursor()
 
-board.execute('CREATE DATABASE `vgsales`')
+for i in range(len(vg_data)):
+    platform_name = vg_data[i]['Platform']
+    board.execute(f'''
+        SELECT name FROM `vgsales`.`platform`
+        WHERE name = "{platform_name}"
+    ''')
+    platform_found = board.fetchone()
+    if platform_found == None:
+        board.execute(f'''
+            INSERT INTO `vgsales`.`platform` (
+                id, 
+                name
+            ) VALUES (
+                {i},
+                "{platform_name}"
+            )
+        ''')
 
-board.execute('''
-    CREATE TABLE `vgsales`.`platform`(
-        id INT(11) PRIMARY KEY,
-        name VARCHAR(255)
-    )
-''')
+client.commit()
+# board.execute('CREATE DATABASE `vgsales`')
 
-board.execute('''
-    CREATE TABLE `vgsales`.`genre`(
-        id INT(11) PRIMARY KEY,
-        name VARCHAR(255)
-    )
-''')
+# board.execute('''
+#     CREATE TABLE `vgsales`.`platform`(
+#         id INT(11) PRIMARY KEY,
+#         name VARCHAR(255)
+#     )
+# ''')
 
-board.execute('''
-    CREATE TABLE `vgsales`.`publisher`(
-        id INT(11) PRIMARY KEY,
-        name VARCHAR(255)
-    )
-''')
+# board.execute('''
+#     CREATE TABLE `vgsales`.`genre`(
+#         id INT(11) PRIMARY KEY,
+#         name VARCHAR(255)
+#     )
+# ''')
 
-board.execute('''
-    CREATE TABLE `vgsales`.`video_game` (
-        id INT(11) PRIMARY KEY,
-        name VARCHAR(255),
-        year INT(11),
-        platform_id INT(11) REFERENCES `vgsales`.`platform`(id),
-        genre_id INT(11) REFERENCES `vgsales`.`genre`(id),
-        publisher_id INT(11) REFERENCES `vgsales`.`publisher`(id)
-    )
-''')
+# board.execute('''
+#     CREATE TABLE `vgsales`.`publisher`(
+#         id INT(11) PRIMARY KEY,
+#         name VARCHAR(255)
+#     )
+# ''')
+
+# board.execute('''
+#     CREATE TABLE `vgsales`.`video_game` (
+#         id INT(11) PRIMARY KEY,
+#         name VARCHAR(255),
+#         year INT(11),
+#         platform_id INT(11) REFERENCES `vgsales`.`platform`(id),
+#         genre_id INT(11) REFERENCES `vgsales`.`genre`(id),
+#         publisher_id INT(11) REFERENCES `vgsales`.`publisher`(id)
+#     )
+# ''')
