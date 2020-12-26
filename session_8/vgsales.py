@@ -33,14 +33,22 @@ client = pymysql.connect(
 
 board = client.cursor()
 
+
+# E T L
 for i in range(len(vg_data)):
+    # EXTRACT
     platform_name = vg_data[i]['Platform']
+
+    # VERYFILE
     board.execute(f'''
         SELECT name FROM `vgsales`.`platform`
         WHERE name = "{platform_name}"
     ''')
+    # TRANSFORM
+    #...
     platform_found = board.fetchone()
     if platform_found == None:
+        # LOAD
         board.execute(f'''
             INSERT INTO `vgsales`.`platform` (
                 id, 
