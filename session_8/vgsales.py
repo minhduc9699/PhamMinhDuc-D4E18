@@ -18,21 +18,13 @@
 #         {}
 #     ]
 # }
-import pymysql
-import pyexcel
+from connect import init_connection
 
-vg_data = pyexcel.get_records(file_name='vgsales.csv')
+connection = init_connection()
 
-client = pymysql.connect(
-    host='localhost',
-    port=3306,
-    user='root',
-    password='@gmail.com',
-    cursorclass=pymysql.cursors.DictCursor
-)
-
-board = client.cursor()
-
+vg_data = connection[0]
+client = connection[1]
+board = connection[2]
 
 # E T L
 for i in range(len(vg_data)):
